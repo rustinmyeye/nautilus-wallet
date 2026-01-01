@@ -1,0 +1,6 @@
+{
+  "appId": "com.nautls.nautilus",
+  "appName": "Nautilus Wallet",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

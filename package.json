@@ -21,7 +21,12 @@
     "test:unit": "vitest run",
     "test:lint": "TIMING=1 eslint ./src",
     "test:format": "prettier ./src --check",
-    "fix:format": "prettier ./src --write"
+    "fix:format": "prettier ./src --write",
+    "mobile:init": "npx cap init nautilus-wallet com.nautls.nautilus --web-dir=dist",
+    "mobile:add-android": "npx cap add android",
+    "mobile:build": "MOBILE=true pnpm run build:mainnet:chrome",
+    "mobile:prepare": "pnpm run mobile:build && npx cap copy android",
+    "mobile:open": "npx cap open android"
   },
   "dependencies": {
     "@download/blockies": "^1.0.3",
@@ -102,7 +107,9 @@
     "vitepress": "^1.6.3",
     "vitepress-plugin-llms": "^1.1.3",
     "vitest": "^3.2.4",
-    "vue-eslint-parser": "^10.2.0"
+    "vue-eslint-parser": "^10.2.0",
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
   },
   "pnpm": {
     "patchedDependencies": {

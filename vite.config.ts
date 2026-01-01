@@ -22,6 +22,8 @@ const env = {
   GIT_COMMIT_HASH: execSync("git rev-parse HEAD").toString().trim()
 };
 
+const isMobile = process.env.MOBILE === "true";
+
 const INSPECT_BUNDLE = process.env.INSPECT === "true";
 
 function r(...paths: string[]): string {
@@ -53,17 +55,21 @@ export default defineConfig(({ mode }) => ({
   define: defEnv(env),
   plugins: [
     ...(mode === "development" ? plugins : []),
-    webExtension({
-      manifest: () => buildManifest(env.NETWORK, env.TARGET, mode),
-      watchFilePaths: [r("src/manifest.ts")],
-      additionalInputs: [
-        `${EXT_ENTRY_ROOT}/content-scripts/injected.ts`,
-        `${EXT_ENTRY_ROOT}/connector/index.html`
-      ],
-      disableAutoLaunch: true,
-      browser: env.TARGET,
-      htmlViteConfig: { plugins }
-    })
+    ...(isMobile
+      ? []
+      : [
+          webExtension({
+            manifest: () => buildManifest(env.NETWORK, env.TARGET, mode),
+            watchFilePaths: [r("src/manifest.ts")],
+            additionalInputs: [
+              `${EXT_ENTRY_ROOT}/content-scripts/injected.ts`,
+              `${EXT_ENTRY_ROOT}/connector/index.html`
+            ],
+            disableAutoLaunch: true,
+            browser: env.TARGET,
+            htmlViteConfig: { plugins }
+          })
+        ])
   ],
   build: {
     rollupOptions: {
